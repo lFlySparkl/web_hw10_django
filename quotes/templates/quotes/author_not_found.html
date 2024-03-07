@@ -1,0 +1,8 @@
+{% extends 'quotes/base.html' %}
+{% block content %}
+
+    <h1>Author Not Found</h1>
+    <p>The author "{{ author_name }}" was not found.</p>
+    <a href="{% url 'quotes:root' %}">Go back to the main page</a>
+
+{% endblock %}

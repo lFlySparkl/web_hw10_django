@@ -1,0 +1,21 @@
+{% extends 'quotes/base.html' %}
+{% block content %}
+
+<div class="author-detail">
+    <h2>{{ author.fullname }}</h2>
+    <p>Born: {{ author.born_date }} in {{ author.born_location }}</p>
+    <p>{{ author.description }}</p>
+    <!-- Другие детали об авторе, которые вы хотите отобразить -->
+
+    <!-- Добавьте цитаты этого автора, если нужно -->
+    {% if author.quote_set.all %}
+        <h3>Quotes by {{ author.fullname }}</h3>
+        <ul>
+            {% for quote in author.quote_set.all %}
+                <li>{{ quote.quote }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+{% endblock %}

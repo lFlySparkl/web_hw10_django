@@ -1,0 +1,63 @@
+{% extends 'quotes/base.html' %}
+{% load extract %}
+
+{% block content %}
+
+    <div class="col-md-6">
+        <a href="{% url 'quotes:top_tags' %}" class="btn btn-primary">Top Ten tags</a>
+        <div class="d-flex justify-content-end">
+            
+            {% if user.is_authenticated %}
+                <div class="ml-auto">
+                    <a href="{% url 'quotes:add_author' %}" class="btn btn-primary">Add Author</a>
+                    <a href="{% url 'quotes:add_quote' %}" class="btn btn-primary">Add Quote</a>
+                </div>
+                <li>Welcome <b>{{ user.username }}!</b>
+                    <a href="{% url 'users:logout' %}" class="btn btn-primary ml-2">Logout</a></li>
+            {% else %}
+                <div>
+                    <a href="{% url 'users:signup' %}" class="btn btn-primary">SignUp</a>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary ml-2">Login</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            {% for quote in quotes %}
+            <div class="quote" itemscope="" itemtype="http://schema.org/CreativeWork">
+                <span class="text" itemprop="text">{{ quote.quote }}</span>
+                <span class="author">
+                    by <a href="{% url 'quotes:author_detail' quote.author.fullname %}">{{ quote.author.fullname }}</a> 
+                    (<a href="{% url 'quotes:author_detail' quote.author.fullname %}">about</a>)
+                </span>
+                <br>
+                <span class="tags">
+                    Tags:
+                    {% for tag in quote.tags.all %}
+                        <a class="tag" href="{% url 'quotes:tag_detail' tag.name %}">{{ tag.name }}</a>
+                    {% endfor %}
+                </span>
+            </div>
+            {% endfor %}
+            <nav>
+                <ul class="pager">
+                    <li class="previous">
+                        <a class="{% if not quotes.has_previous %}disabled invisible{% endif %}"
+                           href="{% if quotes.has_previous %}{% url 'quotes:root_paginate' quotes.previous_page_number %}{% else %}#{% endif %}">
+                            <span aria-hidden="true">←</span> Previous
+                        </a>
+                    </li>
+                    <li class="next">
+                        <a class="{% if not quotes.has_next %}disabled invisible{% endif %}"
+                           href="{% if quotes.has_next %}{% url 'quotes:root_paginate' quotes.next_page_number %}{% else %}#{% endif %}">
+                            Next <span aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
+{% endblock %}
